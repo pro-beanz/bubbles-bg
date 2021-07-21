@@ -1668,7 +1668,8 @@ html.platform-osx .scroller-2TZvBN {
   background-color: var(--background-primary);
 }
 
-#app-mount .navButtonActive-1MkytQ {
+#app-mount .navButtonActive-1MkytQ,
+.lookFilled-1Gx00P.colorGrey-2DXtkV {
   background-color: transparent;
   color: var(--interactive-active);
   background: var(--gradient);
