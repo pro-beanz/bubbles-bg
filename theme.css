@@ -839,7 +839,8 @@
 }
 
 .colorDefault-2K3EoJ.focused-3afm-j,
-.colorDefault-2K3EoJ:hover:not(.hideInteraction-1iHO1O) {
+.colorDefault-2K3EoJ:hover:not(.hideInteraction-1iHO1O),
+.colorDefault-2K3EoJ:active:not(.hideInteraction-1iHO1O) {
   background: var(--white);
 }
 
@@ -1660,6 +1661,17 @@ html.platform-osx .scroller-2TZvBN {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   z-index: 10;
+}
+
+.fieldList-21DyL8,
+.tab-ck0077.active-1MbGPa {
+  background-color: var(--background-primary);
+}
+
+#app-mount .navButtonActive-1MkytQ {
+  background-color: transparent;
+  color: var(--interactive-active);
+  background: var(--gradient);
 }
 
 @-webkit-keyframes fadeIn {
