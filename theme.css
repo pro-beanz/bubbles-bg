@@ -1101,11 +1101,6 @@
   color: var(--text-muted);
 }
 
-#app-mount .messagesPopoutWrap-1MQ1bW {
-  -webkit-box-shadow: none;
-          box-shadow: none;
-}
-
 #app-mount .channelHeader-3Gd2xq {
   top: -1px;
   background: #111;
@@ -1670,6 +1665,7 @@ html.platform-osx .scroller-2TZvBN {
 }
 
 #app-mount .navButtonActive-1MkytQ,
+.tab-ck0077.active-1MbGPa,
 .lookFilled-1Gx00P.colorGrey-2DXtkV {
   background-color: transparent;
   color: var(--interactive-active);
