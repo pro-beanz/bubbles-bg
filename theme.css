@@ -276,7 +276,8 @@
 #app-mount .container-3JTnYm.thin-1ybCId.scrollerBase-289Jih,
 #app-mount .popoutContainer-1MXdqN,
 #app-mount .root-1gCeng:not(.modal-qgFCbT),
-#app-mount .container-3XJ8ns {
+#app-mount .container-3XJ8ns,
+#app-mount .contentWrapper-SvZHNd {
   overflow: hidden !important;
   position: relative;
   border-radius: 20px;
