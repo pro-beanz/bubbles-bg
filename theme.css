@@ -1676,6 +1676,14 @@ html.platform-osx .scroller-2TZvBN {
   background: var(--gradient);
 }
 
+#app-mount .threadSidebar-103BTy {
+  background-image: var(--bubbles-bg);
+  background-color: #101010;
+  background-size: 7px;
+  background-repeat: repeat;
+  background-attachment: fixed;
+}
+
 @-webkit-keyframes fadeIn {
   from {
     opacity: 0;
