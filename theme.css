@@ -277,7 +277,9 @@
 #app-mount .popoutContainer-1MXdqN,
 #app-mount .root-1gCeng:not(.modal-qgFCbT),
 #app-mount .container-3XJ8ns,
-#app-mount .contentWrapper-SvZHNd {
+#app-mount .contentWrapper-SvZHNd,
+#app-mount .container-7uh5fX,
+.floating-window {
   overflow: hidden !important;
   position: relative;
   border-radius: 20px;
@@ -303,7 +305,9 @@
 #app-mount .popoutContainer-1MXdqN:before,
 #app-mount .root-1gCeng:not(.modal-qgFCbT):before,
 #app-mount .container-3XJ8ns:before,
-#app-mount .contentWrapper-SvZHNd:before {
+#app-mount .contentWrapper-SvZHNd:before,
+#app-mount .container-7uh5fX:before,
+.floating-window:before {
   content: "";
   border-radius: 20px;
   background-image: var(--bubbles-bg);
