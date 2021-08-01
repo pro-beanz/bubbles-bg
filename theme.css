@@ -1676,7 +1676,7 @@ html.platform-osx .scroller-2TZvBN {
   background: var(--gradient);
 }
 
-#app-mount .threadSidebar-1o3BTy {
+.threadSidebar-1o3BTy {
   background-image: var(--bubbles-bg);
   background-color: #101010;
   background-size: 7px;
