@@ -279,6 +279,7 @@
 #app-mount .container-3XJ8ns,
 #app-mount .contentWrapper-SvZHNd,
 #app-mount .container-7uh5fX,
+#app-mount .popout-APcvZm,
 .floating-window {
   overflow: hidden !important;
   position: relative;
@@ -307,6 +308,7 @@
 #app-mount .container-3XJ8ns:before,
 #app-mount .contentWrapper-SvZHNd:before,
 #app-mount .container-7uh5fX:before,
+#app-mount .popout-APcvZm:before,
 .floating-window:before {
   content: "";
   border-radius: 20px;
