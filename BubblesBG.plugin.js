@@ -2,82 +2,152 @@
  * @name BubblesBG
  * @author beanz
  * @description Overrides the Discord background with bubbles, as seen on https://www.beanz.pro. Combination plugin and theme, based on Frosted Glass, by Gibbu. Dark theme required. Works best when not used with any additional themes.
- * @version 1.0.0
+ * @version 1.1.0
  * @authorId 249922383761244161
  * @authorLink https://www.twitter.com/pro_beanz
  * @website https://www.beanz.pro
  * @source https://github.com/pro-beanz/bubbles-bg
  */
 
-const styles = `
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;700&display=swap');
-    @import url('https://pro-beanz.github.io/bubbles-bg/theme.css');
-    @import url('https://discordstyles.github.io/Addons/windows-titlebar.css');
-`
+ let canvas;
+ let ctx;
+ const colors = [
+     [255, 255, 255],
+     [19, 19, 19]
+ ]
+ let bubbles = [];
+ let running = false;
+ let ratio;
 
-let canvas;
-let ctx;
-const colors = [
-    [255, 255, 255],
-    [19, 19, 19]
-]
-let borderWidth;
-let cursorRadius;
-let bubbles = [];
-let running = false;
-let ratio;
-
-class BubblesBG {
-    // Constructor
-    constructor() {
-        this.initialized = false;
-    }
-
-    // Load/Unload
-    load() {}
-    unload() {}
-
-    // Start/Stop
-    start() {
-        // styles
-        var styleSheet = document.createElement("style");
-        styleSheet.setAttribute("id", 'bubbles-bg');
-        styleSheet.type = "text/css"
-        styleSheet.innerText = styles;
-        document.head.appendChild(styleSheet);
-
-        // add canvas
-        var body = document.getElementsByClassName('bg-h5JY_x')[0];
-        body.insertAdjacentHTML('afterbegin', '<canvas id="bubbles-canvas"> </canvas>');
-        running = true;
-        
-        // local canvas variable
-        canvas = document.getElementById("bubbles-canvas");
-        ctx = canvas.getContext("2d");
-        render();
-        
-        for (let i = 0; i < 75; i++) { bubbles.push(new Bubble()) }
-        update();
-    }
-
-    stop() {
-        running = false;
-
-        // styles
-        document.head.removeChild(document.getElementById('bubbles-bg'));
-
-        // canvas
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        var body = document.getElementsByClassName('bg-h5JY_x')[0];
-        for (let i = 0; i < bubbles.length; i) bubbles.pop();
-        body.removeChild(document.getElementById('bubbles-canvas'));
+module.exports = (_ => {
+    const config = {
+        "info": {
+            "name": "Bubbles BG",
+            "author": "beanz",
+            "version": "1.1.0",
+            "description": "Overrides the Discord background with bubbles, as seen on https://www.beanz.pro. Combination plugin and theme, based on Frosted Glass, by Gibbu. Dark theme required. Works best when not used with any additional themes."
+        },
+        "changeLog": {
+            "added": {
+                "Hidden": "BDFDB dependency"
+            },
+            "fixed": {
+                "Styling": "Button colors have gradients now"
+            }
+        }
     };
 
-    //  Initialize
-    initialize() {
-        this.initialized = true;
-    }
-}
+    return (window.Lightcord || window.LightCord) ? class {
+        getName() { return config.info.name; }
+        getAuthor() { return config.info.author; }
+        getVersion() { return config.info.version; }
+        getDescription() { return "Do not use LightCord!"; }
+        load() { BdApi.alert("Attention!", "By using LightCord you are risking your Discord Account, due to using a 3rd Party Client. Switch to an official Discord Client (https://discord.com/) with the proper BD Injection (https://betterdiscord.app/)"); }
+        start() { }
+        stop() { }
+    } : !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
+        getName() { return config.info.name; }
+        getAuthor() { return config.info.author; }
+        getVersion() { return config.info.version; }
+        getDescription() { return `The Library Plugin needed for ${config.info.name} is missing. Open the Plugin Settings to download it. \n\n${config.info.description}`; }
+
+        downloadLibrary() {
+            require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
+                if (!e && b && r.statusCode == 200) require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), b, _ => BdApi.showToast("Finished downloading BDFDB Library", { type: "success" }));
+                else BdApi.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
+            });
+        }
+
+        load() {
+            if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, { pluginQueue: [] });
+            if (!window.BDFDB_Global.downloadModal) {
+                window.BDFDB_Global.downloadModal = true;
+                BdApi.showConfirmationModal("Library Missing", `The Library Plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
+                    confirmText: "Download Now",
+                    cancelText: "Cancel",
+                    onCancel: _ => { delete window.BDFDB_Global.downloadModal; },
+                    onConfirm: _ => {
+                        delete window.BDFDB_Global.downloadModal;
+                        this.downloadLibrary();
+                    }
+                });
+            }
+            if (!window.BDFDB_Global.pluginQueue.includes(config.info.name)) window.BDFDB_Global.pluginQueue.push(config.info.name);
+        }
+        start() { this.load(); }
+        stop() { }
+        // getSettingsPanel() {
+        //     let template = document.createElement("template");
+        //     template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${config.info.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
+        //     template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
+        //     return template.content.firstElementChild;
+        // }
+    } : (([Plugin, BDFDB]) => {
+        const styles = `
+            @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;700&display=swap');
+            @import url('https://pro-beanz.github.io/bubbles-bg/theme.css');
+            @import url('https://discordstyles.github.io/Addons/windows-titlebar.css');
+        `
+
+        return class BubblesBG extends Plugin {
+            onLoad() {
+                this.patchedModules = {
+                    after: {
+                        ChannelItem: "default"
+                    }
+                };
+            }
+
+            onStart() {
+                BDFDB.PatchUtils.forceAllUpdates(this);
+
+                // styles
+                let styleSheet = document.createElement("style");
+                styleSheet.setAttribute("id", 'bubbles-bg');
+                styleSheet.innerText = styles;
+                document.head.appendChild(styleSheet);
+
+                // add canvas
+                let body = document.getElementsByClassName('bg-h5JY_x')[0];
+                body.insertAdjacentHTML('afterbegin', '<canvas id="bubbles-canvas"> </canvas>');
+                running = true;
+
+                // local canvas variable
+                canvas = document.getElementById("bubbles-canvas");
+                ctx = canvas.getContext("2d");
+                render();
+
+                for (let i = 0; i < 75; i++) { bubbles.push(new Bubble()) }
+                update();
+            }
+
+            onStop() {
+                BDFDB.PatchUtils.forceAllUpdates(this);
+
+                running = false;
+
+                // styles
+                let styleSheet = document.getElementById('bubbles-bg');
+                console.log(styleSheet);
+                if (styleSheet) document.head.removeChild(document.getElementById('bubbles-bg'));
+
+                // canvas
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let i = 0; i < bubbles.length; i) bubbles.pop();
+                if (document.getElementById('bubbles-canvas'))
+                    document.getElementsByClassName('bg-h5JY_x')[0].removeChild(canvas);
+            }
+
+            // getSettingsPanel(collapseStates = {}) {
+            //     // TODO
+            // }
+
+            // onSettingsClosed() {
+            //     // TODO
+            // }
+        }
+    })(window.BDFDB_Global.PluginUtils.buildPlugin(config));
+})();
 
 class Bubble {
     constructor() {
@@ -137,12 +207,9 @@ class Bubble {
 }
 
 function render() {
-    canvas.height = window.outerHeight;
-    canvas.width = window.outerWidth;
+    canvas.height = window.screen.availHeight;
+    canvas.width = window.screen.availWidth;
     ratio = canvas.height > canvas.width ? canvas.width / canvas.height : canvas.height / canvas.width;
-
-    cursorRadius = 0.25 * canvas.height;
-    borderWidth = 0.01 * canvas.width;
     window.addEventListener('resize', render, true);
 }
 
