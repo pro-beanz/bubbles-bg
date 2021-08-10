@@ -333,6 +333,13 @@
           user-select: none;
   z-index: -1;
 }
+#app-mount .container-JHR0NT .containerBackground-LlUax5 {
+  overflow: hidden !important;
+  border-radius: 12px;
+  background-color: #111;
+  background-image: var(--bubbles-bg);
+  background-size: 7px;
+}
 
 #app-mount .lookFilled-1Gx00P.colorPrimary-3b3xI6,
 #app-mount .lookGhost-2Fn_0-.colorGrey-2DXtkV,
