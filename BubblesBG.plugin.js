@@ -161,7 +161,7 @@ class Bubble {
         this.radius = randRange(0.00694 * canvas.height, 0.02431 * canvas.height);
 
         // reset position
-        if (oneOrZero() > Math.abs(ratio)) {
+        if (oneOrZero() > ratio) {
             this.xPos = -this.radius;
             this.yPos = randRange(0, canvas.height);
         } else {
@@ -209,7 +209,7 @@ class Bubble {
 function render() {
     canvas.height = window.screen.availHeight;
     canvas.width = window.screen.availWidth;
-    ratio = canvas.height > canvas.width ? canvas.width / canvas.height : canvas.height / canvas.width;
+    ratio = Math.abs(canvas.height > canvas.width ? canvas.width / canvas.height : canvas.height / canvas.width);
     window.addEventListener('resize', render, true);
 }
 
